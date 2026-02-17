@@ -11,20 +11,20 @@ export default class ArrayList<T> {
         return this.insertAt(item, 0);
     }
     insertAt(item: T, idx: number): void {
-        if (idx > this.length) {
+        if (idx >= this.length) {
             this.array[this.length] = item;
             this.length++;
 
             return undefined;
         }
-        let i = this.length;
+        let i = this.length + 1;
         while (i >= idx) {
             this.array[i] = this.array[i - 1];
             i--;
         }
         this.array[idx] = item;
-        console.log(this.array);
 
+        this.length++;
         return undefined;
     }
 
@@ -36,6 +36,7 @@ export default class ArrayList<T> {
     }
     remove(item: T): T | undefined {
         let idx = 0;
+        if (this.array[idx] === item) return this.removeAt(idx);
         while (idx < this.length) {
             if (this.array[idx] === item) {
                 break;
