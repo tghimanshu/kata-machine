@@ -1,13 +1,13 @@
 declare type Point = {
     x: number;
     y: number;
-}
+};
 
 declare type ListNode<T> = {
-    value: T,
-    next?: ListNode<T>,
-    prev?: ListNode<T>,
-}
+    value: T;
+    next?: ListNode<T>;
+    prev?: ListNode<T>;
+};
 
 declare interface List<T> {
     get length(): number;
@@ -41,4 +41,10 @@ declare type GeneralNode<T> = {
 declare interface ILRU<K, V> {
     update(key: K, value: V): void;
     get(key: K): V | undefined;
+}
+
+declare interface RingBuffer<T> {
+    push(value: T): void;
+    pop(): T | undefined;
+    get(index: number): T | undefined;
 }
