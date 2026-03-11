@@ -1,4 +1,5 @@
 export default class RingBuffer<T> {
+    // NOTE: The Following Class Doesn't Alow for Dynamic Resizing, It is a Fixed Size Buffer, If you want to add more than 10 items, it will start overwriting the old ones.
     private buffer: T[];
     private size: number = 10;
 
@@ -7,39 +8,29 @@ export default class RingBuffer<T> {
     private length: number;
 
     constructor() {
-        this.buffer = new Array<T>(this.size);
-
-        this.head = 8;
-        this.tail = 8;
+        this.buffer = new Array(this.size);
         this.length = 0;
+        this.head = 0;
+        this.tail = 0;
     }
     push(value: T): void {
-        if (!this.buffer[this.head % this.size]) {
-            this.length++;
-            this.buffer[this.head % this.size] = value;
-            return;
-        }
-
-        this.buffer[(this.tail + 1) % this.size] = value;
-        this.tail += this.tail % this.size;
+        this.buffer[this.tail] = value;
         this.length++;
-        return;
+
+        this.tail = (this.tail + 1) % this.size;
     }
     pop(): T | undefined {
         if (this.length === 0) return undefined;
-        const val = this.buffer[this.head % this.size];
-        delete this.buffer[this.head % this.size];
-        if (this.head === this.tail) {
-            this.head = 0;
-            this.tail = 0;
-            return val;
-        }
-        this.head += (this.head + 1) % this.size;
+
+        let val = this.buffer[this.head];
+        delete this.buffer[this.head];
         this.length--;
+        this.head = (this.head + 1) % this.size;
+
         return val;
     }
     get(index: number): T | undefined {
-        if (index >= this.length) return undefined;
+        if (index < 0 || index >= this.length) return undefined;
 
         return this.buffer[(this.head + index) % this.size];
     }
